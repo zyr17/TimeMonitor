@@ -1,0 +1,24 @@
+﻿<Window x:Class="TimeMonitor.MouseKeyboardHook"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimeMonitor"
+        mc:Ignorable="d"
+        Title="MouseKeyboardHook" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Content="test" Height="30" Width="100" Click="Button_Click"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Name="TBLeft" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20"/>
+            <TextBlock Name="TBRight" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20"/>
+        </Grid>
+    </Grid>
+</Window>

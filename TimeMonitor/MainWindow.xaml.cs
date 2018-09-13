@@ -12,6 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Runtime.InteropServices;
+using System.Windows.Threading;
+using System.Diagnostics;
+using System.Runtime.ExceptionServices;
+using System.Threading;
+using System.Drawing;
 
 namespace TimeMonitor
 {
@@ -23,6 +29,18 @@ namespace TimeMonitor
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var W = new GetForeground();
+            W.Show();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            var W = new MouseKeyboardHook();
+            W.ShowDialog();
         }
     }
 }
