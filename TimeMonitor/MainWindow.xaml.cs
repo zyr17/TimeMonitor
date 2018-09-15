@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace TimeMonitor
 {
@@ -26,9 +27,43 @@ namespace TimeMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        NotifyIconComponent NIC;
+
         public MainWindow()
         {
             InitializeComponent();
+            NIC = new NotifyIconComponent();
+            NIC.NotifyIconText = "一个静悄悄的图标";
+            Closing += MainWindow_Closing;
+            NIC.ContextMenuStripItems.Add("显示/隐藏主界面");
+            NIC.ContextMenuStripItems[0].Click += Visibility_Click;
+            NIC.ContextMenuStripItems.Add("退出");
+            NIC.ContextMenuStripItems[1].Click += Exit_Click;
+            NIC.NotifyIconIcon = new Icon("clock.ico");
+        }
+
+        private void Visibility_Click(object sender, EventArgs e)
+        {
+            WindowVisibilityChange();
+        }
+
+        private void Exit_Click(object sender, EventArgs e)
+        {
+            NIC.NotifyIconVisibility = false;
+            Environment.Exit(0);
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            WindowVisibilityChange();
+        }
+
+        void WindowVisibilityChange()
+        {
+            if (Visibility == Visibility.Hidden) Visibility = Visibility.Visible;
+            else Visibility = Visibility.Hidden;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -40,7 +75,7 @@ namespace TimeMonitor
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             var W = new MouseKeyboardHook();
-            W.ShowDialog();
+            W.Show();
         }
     }
 }
