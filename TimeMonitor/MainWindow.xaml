@@ -6,12 +6,15 @@
         xmlns:local="clr-namespace:TimeMonitor"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Button Content="GetForegroundWindow" Height="200" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center" Click="Button_Click"/>
-        <Button Grid.Column="1" Content="MouseKeyboardHook" Height="200" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center" Click="Button_Click_1"/>
+    <Grid Name="MainGrid">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="GetForegroundWindow" Height="200" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center" Click="Button_Click"/>
+            <Button Grid.Column="1" Content="MouseKeyboardHook" Height="200" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center" Click="Button_Click_1"/>
+            <Button Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click_2"/>
+        </Grid>
     </Grid>
 </Window>
