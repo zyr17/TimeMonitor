@@ -78,31 +78,19 @@ namespace TimeMonitor
             W.Show();
         }
 
-        double delta = 0.6;
+        double delta = 0.11356;
         double start = 0.05;
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            var myPath = new Path();
-            myPath.Fill = System.Windows.Media.Brushes.MediumSlateBlue;
-            myPath.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-            myPath.VerticalAlignment = VerticalAlignment.Top;
-            PathGeometry myGeometry = new PathGeometry();
-            var oy = MainGrid.ActualHeight / 2;
-            var ox = MainGrid.ActualWidth / 2;
-            var R = MainGrid.ActualHeight;
-            if (MainGrid.ActualWidth < R) R = MainGrid.ActualWidth;
-            R /= 2;
-            PathFigure PF = new PathFigure();
-            PF.StartPoint = new System.Windows.Point(ox, oy);
-            double startpos = start, endpos = delta + start;
-            start = endpos;
-            PF.Segments.Add(new LineSegment(new System.Windows.Point(ox + Math.Cos(Math.PI * 2 * startpos) * R, oy + Math.Sin(Math.PI * 2 * startpos) * R), false));
-            PF.Segments.Add(new ArcSegment(new System.Windows.Point(ox + Math.Cos(Math.PI * 2 * endpos) * R, oy + Math.Sin(Math.PI * 2 * endpos) * R), new System.Windows.Size(R, R), 0, (endpos - startpos > 0.5 ? true : false), SweepDirection.Clockwise, false));
-            PF.Segments.Add(new LineSegment(new System.Windows.Point(ox, oy), false));
-            myGeometry.Figures.Add(PF);
-            myPath.Data = myGeometry;
-            MainGrid.Children.Add(myPath);
+            double l = MainGrid.ActualWidth / 2, t = MainGrid.ActualHeight / 2;
+            double r = (l > t ? t : l) / 1.2;
+            double st = start, ed = start + delta;
+            start += delta;
+            SectorPath TM = new SectorPath(l, t, r, st, ed);
+            MainGrid.Children.Add(TM.GetPath);
         }
+
+        
     }
 }
