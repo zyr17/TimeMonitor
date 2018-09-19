@@ -29,10 +29,12 @@ namespace TimeMonitor
     {
 
         NotifyIconComponent NIC;
+        DateTimeSelector DTS;
 
         public MainWindow()
         {
             InitializeComponent();
+            DTS = new DateTimeSelector();
             NIC = new NotifyIconComponent();
             NIC.NotifyIconText = "一个静悄悄的图标";
             Closing += MainWindow_Closing;
@@ -66,31 +68,50 @@ namespace TimeMonitor
             else Visibility = Visibility.Hidden;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var W = new GetForeground();
-            W.Show();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            var W = new MouseKeyboardHook();
-            W.Show();
-        }
-
         double delta = 0.11356;
         double start = 0.05;
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void StartTimeSelectButton_Click(object sender, RoutedEventArgs e)
         {
-            double l = MainGrid.ActualWidth / 2, t = MainGrid.ActualHeight / 2;
+            /*
+            double l = SectorGrid.ActualWidth / 2, t = SectorGrid.ActualHeight / 2;
             double r = (l > t ? t : l) / 1.2;
             double st = start, ed = start + delta;
             start += delta;
             SectorPath TM = new SectorPath(l, t, r, st, ed);
-            MainGrid.Children.Add(TM.GetPath);
+            SectorGrid.Children.Add(TM.GetPath);
+            l = RectangleGrid.ActualWidth / 20;
+            t = RectangleGrid.ActualHeight / 20;
+            double w = l * 18;
+            double h = t * 18;
+            RectanglePath RP = new RectanglePath(l, t, w, h, st, ed);
+            RectangleGrid.Children.Add(RP.GetPath);
+            */
+            string SelectedTime = GetTime();
+            if (SelectedTime != null)
+            {
+                var strs = SelectedTime.Split(' ');
+                StartYMDTextBlock.Text = strs[0];
+                StartHMSTextBlock.Text = strs[1];
+            }
         }
 
-        
+        string GetTime()
+        {
+            DTS = new DateTimeSelector();
+            DTS.ShowDialog();
+            return DTS.TimeResult;
+        }
+
+        private void EndTimeSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            string SelectedTime = GetTime();
+            if (SelectedTime != null)
+            {
+                var strs = SelectedTime.Split(' ');
+                EndYMDTextBlock.Text = strs[0];
+                EndHMSTextBlock.Text = strs[1];
+            }
+        }
     }
 }

@@ -11,38 +11,23 @@ namespace TimeMonitor
 {
     class SectorPath
     {
-        static SolidColorBrush[] Colors = {
-            Brushes.MediumSlateBlue,
-            Brushes.LightSkyBlue,
-            Brushes.LimeGreen,
-            Brushes.Chocolate,
-            Brushes.Orchid,
-            Brushes.PaleGreen,
-            Brushes.DodgerBlue,
-            Brushes.Silver,
-            Brushes.Red,
-            Brushes.Plum,
-            Brushes.DodgerBlue,
-            Brushes.Orange,
-            Brushes.DarkGray,
-        };
-        static int nowcolor = 0;
+        
         double ox, oy, r, radstart, radend;
         public Path GetPath { get; private set; }
-        public SectorPath(double Left, double Top, double R, double Start, double End)
+        public SectorPath(double Left, double Top, double R, double Start, double End, SolidColorBrush Brush = null)
         {
             ox = Left;
             oy = Top;
             r = R;
             radstart = Start * Math.PI * 2;
             radend = End * Math.PI * 2;
-            GeneratePath();
+            GeneratePath(Brush);
         }
-        public void GeneratePath()
+        void GeneratePath(SolidColorBrush Brush)
         {
             GetPath = new Path();
-            GetPath.Fill = Colors[nowcolor++];
-            if (nowcolor >= Colors.Length) nowcolor = 0;
+            if (Brush == null) Brush = Consts.NextBrush;
+            GetPath.Fill = Brush;
             GetPath.HorizontalAlignment = HorizontalAlignment.Left;
             GetPath.VerticalAlignment = VerticalAlignment.Top;
             PathGeometry myGeometry = new PathGeometry();
@@ -60,7 +45,7 @@ namespace TimeMonitor
         private void MyPath_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             GetPath.RenderTransform = null;
-            GetPath.Margin = new Thickness(0, 0, 0, 0);
+            GetPath.Margin = new Thickness(0);
         }
 
         private void MyPath_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)

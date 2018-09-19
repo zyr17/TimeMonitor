@@ -76,7 +76,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Consts.cs" />
+    <Compile Include="DateTimeSelector.xaml.cs">
+      <DependentUpon>DateTimeSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RectanglePath.cs" />
     <Compile Include="SectorPath.cs" />
+    <Page Include="DateTimeSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GetForeground.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

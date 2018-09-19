@@ -6,15 +6,65 @@
         xmlns:local="clr-namespace:TimeMonitor"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Name="MainGrid">
+    <Grid Name="MainGrid" Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Content="GetForegroundWindow" Height="200" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center" Click="Button_Click"/>
-            <Button Grid.Column="1" Content="MouseKeyboardHook" Height="200" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center" Click="Button_Click_1"/>
-            <Button Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click_2"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="起始时间" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Name="StartYMDTextBlock" Text="1970-01-01" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Name="StartHMSTextBlock" Text="18:00:00" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1"/>
+                    </Grid>
+                    <Button Click="StartTimeSelectButton_Click" Content="选择" FontSize="20" Height="28" Width="45" Grid.Column="2"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="终止时间" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Name="EndYMDTextBlock" Text="1970-01-01" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Name="EndHMSTextBlock" Text="18:00:00" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1"/>
+                    </Grid>
+                    <Button Click="EndTimeSelectButton_Click" Content="选择" FontSize="20" Height="28" Width="45" Grid.Column="2"/>
+                </Grid>
+                <Button Content="设为摸鱼任务" FontSize="20" Height="28" Width="165" Grid.Row="2"/>
+                <Button Content="按标题拆分任务" FontSize="20" Height="28" Width="165" Grid.Row="3"/>
+            </Grid>
+            <Grid Name="ListGrid" Grid.Column="1"/>
+            <Grid Name="SectorGrid" Grid.Column="2"/>
         </Grid>
+        <Grid Name="RectangleGrid" Grid.Row="1"/>
     </Grid>
 </Window>
