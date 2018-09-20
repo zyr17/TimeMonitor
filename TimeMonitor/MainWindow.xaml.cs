@@ -19,6 +19,7 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Data.SQLite;
 
 namespace TimeMonitor
 {
@@ -40,9 +41,13 @@ namespace TimeMonitor
             Closing += MainWindow_Closing;
             NIC.ContextMenuStripItems.Add("显示/隐藏主界面");
             NIC.ContextMenuStripItems[0].Click += Visibility_Click;
+            NIC.ContextMenuStripItems[0].Font = new Font(NIC.ContextMenuStripItems[0].Font, NIC.ContextMenuStripItems[0].Font.Style | System.Drawing.FontStyle.Bold);
             NIC.ContextMenuStripItems.Add("退出");
             NIC.ContextMenuStripItems[1].Click += Exit_Click;
+            NIC.NotifyIconDoubleClick = Visibility_Click;
             NIC.NotifyIconIcon = new Icon("clock.ico");
+            Hook.Start();
+            CheckForeground.Start();
         }
 
         private void Visibility_Click(object sender, EventArgs e)

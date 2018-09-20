@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace TimeMonitor
 {
@@ -65,6 +66,13 @@ namespace TimeMonitor
             set
             {
                 NotifyIconMain.Visible = value;
+            }
+        }
+        public MouseEventHandler NotifyIconDoubleClick
+        {
+            set
+            {
+                NotifyIconMain.MouseDoubleClick += value;
             }
         }
     }

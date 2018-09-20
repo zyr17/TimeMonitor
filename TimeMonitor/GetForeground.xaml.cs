@@ -19,80 +19,15 @@ using System.Windows.Threading;
 namespace TimeMonitor
 {
 
-    public class WinAPIFunctions
-    {
-        //Used to get Handle for Foreground Window
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr GetForegroundWindow();
+    
 
-        //Used to get ID of any Window
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern int GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
-        public delegate bool WindowEnumProc(IntPtr hwnd, IntPtr lparam);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool EnumChildWindows(IntPtr hwnd, WindowEnumProc callback, IntPtr lParam);
-
-        public static int GetWindowProcessId(IntPtr hwnd)
-        {
-            int pid;
-            GetWindowThreadProcessId(hwnd, out pid);
-            return pid;
-        }
-
-        public static IntPtr GetforegroundWindow()
-        {
-            return GetForegroundWindow();
-        }
-    }
-
-    class FindHostedProcess
-    {
-        static private Process _realProcess;
-
-        static public Process Find()
-        {
-            var foregroundProcess = Process.GetProcessById(WinAPIFunctions.GetWindowProcessId(WinAPIFunctions.GetforegroundWindow()));
-            if (foregroundProcess.ProcessName == "ApplicationFrameHost")
-            {
-                foregroundProcess = GetRealProcess(foregroundProcess);
-            }
-            return foregroundProcess;
-        }
-
-        static private Process GetRealProcess(Process foregroundProcess)
-        {
-            WinAPIFunctions.EnumChildWindows(foregroundProcess.MainWindowHandle, ChildWindowCallback, IntPtr.Zero);
-            return _realProcess;
-        }
-
-        static private bool ChildWindowCallback(IntPtr hwnd, IntPtr lparam)
-        {
-            var process = Process.GetProcessById(WinAPIFunctions.GetWindowProcessId(hwnd));
-            if (process.ProcessName != "ApplicationFrameHost")
-            {
-                _realProcess = process;
-            }
-            return true;
-        }
-    }
+    
 
     /// <summary>
     /// GetForegroundWindow.xaml 的交互逻辑
     /// </summary>
     public partial class GetForeground : Window
     {
-        public static ImageSource ChangeBitmapToImageSource(Bitmap bitmap)
-        {
-            IntPtr hBitmap = bitmap.GetHbitmap();
-            ImageSource wpfBitmap = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                hBitmap,
-                IntPtr.Zero,
-                Int32Rect.Empty,
-                BitmapSizeOptions.FromEmptyOptions());
-            return wpfBitmap;
-        }
         [DllImport("User32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         public static extern IntPtr GetForegroundWindow();
 
@@ -150,7 +85,7 @@ namespace TimeMonitor
             if (PP == null) return;
             TB.Text = PP.ProcessName + "|" + PP.MainModule.FileName + "|" + PP.MainWindowTitle;
             Bitmap img = System.Drawing.Icon.ExtractAssociatedIcon(PP.MainModule.FileName).ToBitmap();
-            IMG.Source = ChangeBitmapToImageSource(img);
+            IMG.Source = Consts.ChangeBitmapToImageSource(img);
         }
     }
 }
