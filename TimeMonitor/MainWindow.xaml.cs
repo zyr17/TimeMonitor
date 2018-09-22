@@ -27,7 +27,8 @@ namespace TimeMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        
+        List<Data.ShowData> ShowDataList = new List<Data.ShowData>();
         NotifyIconComponent NIC;
         DateTimeSelector DTS;
 
@@ -47,6 +48,7 @@ namespace TimeMonitor
             NIC.NotifyIconIcon = Consts.Base64String2Icon(Consts.clockstr);
             Hook.Start();
             CheckForeground.Start();
+            UpdateByShowData();
         }
 
         private void Visibility_Click(object sender, EventArgs e)
@@ -117,12 +119,25 @@ namespace TimeMonitor
                 EndHMSTextBlock.Text = strs[1];
             }
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        
+        void UpdateByShowData()
         {
-            var dis = ((Button)sender).TranslatePoint(new System.Windows.Point(0, 0), ListStackPanel).Y;
-            ListScrollViewer.ScrollToVerticalOffset(dis);
-            Mouse.GetPosition(ListStackPanel);
+            var SD = new Data.ShowData();
+            SD.I = Consts.Base64String2Icon(Consts.xstr);
+            SD.Start = new DateTime(2018, 7, 7, 12, 0, 0);
+            SD.End = DateTime.Now;
+            SD.Action = "explorer.exe";
+            SD.Title = "TimeMonitor";
+            for (int i = 10; i > 0; i--)
+                ShowDataList.Add(SD);
+
+            ListStackPanel.Children.Clear();
+            foreach (var data in ShowDataList)
+            {
+                ListStackPanelItem LSPI = new ListStackPanelItem(data);
+                ListStackPanel.Children.Add(LSPI);
+            }
         }
+
     }
 }

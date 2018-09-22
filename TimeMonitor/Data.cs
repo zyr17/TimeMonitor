@@ -11,7 +11,7 @@ using System.Windows;
 
 namespace TimeMonitor
 {
-    class Data
+    public class Data
     {
         public class Actions
         {
@@ -20,6 +20,12 @@ namespace TimeMonitor
             public string Action;
             public string Title;
             public Icon Icon;
+        }
+        public class ShowData
+        {
+            public Icon I;
+            public DateTime Start, End;
+            public string Action, Title, ID;
         }
         public static bool AddActions(Actions A)
         {
@@ -66,7 +72,7 @@ namespace TimeMonitor
                     {
                         Actions A = new Actions();
                         DateTime D = new DateTime((long)r["TimeStamp"]);
-                        A.DateTimeString = D.ToString("yyyy-MM-dd HH:mm:ss");
+                        A.DateTimeString = D.ToString(Consts.DateTimeFormatString);
                         //D.Year + "-" + D.Month + "-" + D.Day + " " + D.Hour + ":" + D.Minute + ":" + D.Second;
                         A.Type = (int)r["Type"];
                         A.Action = r["Action"].ToString();

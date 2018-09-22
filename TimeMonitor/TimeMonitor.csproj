@@ -104,6 +104,9 @@
       <DependentUpon>GetForeground.xaml</DependentUpon>
     </Compile>
     <Compile Include="Hook.cs" />
+    <Compile Include="ListStackPanelItem.xaml.cs">
+      <DependentUpon>ListStackPanelItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RectanglePath.cs" />
     <Compile Include="SectorPath.cs" />
     <Page Include="DateTimeSelector.xaml">
@@ -113,6 +116,10 @@
     <Page Include="GetForeground.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ListStackPanelItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

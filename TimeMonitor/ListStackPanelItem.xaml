@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="TimeMonitor.ListStackPanelItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TimeMonitor"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" FontSize="12">
+    <Grid Height="32" Margin="2" Background="WhiteSmoke">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="32"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Image Name="IconImage"/>
+        <Grid Grid.Column="1" Margin="5 0 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Name="TimeTextBlock" Text="TimeTextBlock" VerticalAlignment="Center"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="90"/>
+                    <ColumnDefinition Width="Auto" MinWidth="90"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Name="ActionTextBlock" Text="ActionTextBlock" VerticalAlignment="Center"/>
+                <TextBlock Name="TitleTextBlock" Text="TitleTextBlock" Grid.Column="1" VerticalAlignment="Center" Margin="10 0 0 0"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

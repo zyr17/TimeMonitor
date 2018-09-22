@@ -81,15 +81,6 @@
             <Grid Name="ListGrid" Grid.Column="1" Margin="5">
                 <ScrollViewer Name="ListScrollViewer">
                     <StackPanel Name="ListStackPanel">
-                        <Button Click="Button_Click" Height="60"/>
-                        <Button Click="Button_Click" Height="60"/>
-                        <Button Click="Button_Click" Height="60"/>
-                        <Button Click="Button_Click" Height="60"/>
-                        <Button Click="Button_Click" Height="60"/>
-                        <Button Click="Button_Click" Height="60"/>
-                        <Button Click="Button_Click" Height="60"/>
-                        <Button Click="Button_Click" Height="60"/>
-                        <Button Click="Button_Click" Height="60"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
