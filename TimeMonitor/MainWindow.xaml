@@ -78,7 +78,21 @@
                     <TextBlock Text="作为离开时间" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="3"/>
                 </Grid>
             </Grid>
-            <Grid Name="ListGrid" Grid.Column="1"/>
+            <Grid Name="ListGrid" Grid.Column="1" Margin="5">
+                <ScrollViewer Name="ListScrollViewer">
+                    <StackPanel Name="ListStackPanel">
+                        <Button Click="Button_Click" Height="60"/>
+                        <Button Click="Button_Click" Height="60"/>
+                        <Button Click="Button_Click" Height="60"/>
+                        <Button Click="Button_Click" Height="60"/>
+                        <Button Click="Button_Click" Height="60"/>
+                        <Button Click="Button_Click" Height="60"/>
+                        <Button Click="Button_Click" Height="60"/>
+                        <Button Click="Button_Click" Height="60"/>
+                        <Button Click="Button_Click" Height="60"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
             <Grid Name="SectorGrid" Grid.Column="2"/>
         </Grid>
         <Grid Name="RectangleGrid" Grid.Row="1"/>

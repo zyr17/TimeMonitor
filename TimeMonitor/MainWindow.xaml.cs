@@ -18,7 +18,6 @@ using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Data.SQLite;
 
 namespace TimeMonitor
@@ -45,7 +44,7 @@ namespace TimeMonitor
             NIC.ContextMenuStripItems.Add("退出");
             NIC.ContextMenuStripItems[1].Click += Exit_Click;
             NIC.NotifyIconDoubleClick = Visibility_Click;
-            NIC.NotifyIconIcon = new Icon("clock.ico");
+            NIC.NotifyIconIcon = Consts.Base64String2Icon(Consts.clockstr);
             Hook.Start();
             CheckForeground.Start();
         }
@@ -117,6 +116,13 @@ namespace TimeMonitor
                 EndYMDTextBlock.Text = strs[0];
                 EndHMSTextBlock.Text = strs[1];
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var dis = ((Button)sender).TranslatePoint(new System.Windows.Point(0, 0), ListStackPanel).Y;
+            ListScrollViewer.ScrollToVerticalOffset(dis);
+            Mouse.GetPosition(ListStackPanel);
         }
     }
 }

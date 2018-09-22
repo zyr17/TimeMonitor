@@ -108,7 +108,7 @@ namespace TimeMonitor
                 A.Icon = i;
                 if (LastActions == null || LastActions.Action != A.Action || LastActions.Title != A.Title)
                 {
-                    Data.AddData(A);
+                    Data.AddActions(A);
                     LastActions = A;
                 }
             }

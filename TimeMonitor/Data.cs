@@ -21,7 +21,7 @@ namespace TimeMonitor
             public string Title;
             public Icon Icon;
         }
-        public static bool AddData(Actions A)
+        public static bool AddActions(Actions A)
         {
             using (SQLiteConnection con = new SQLiteConnection("Data Source=Actions.db;Version=3;"))
             {
@@ -34,14 +34,7 @@ namespace TimeMonitor
                     cmd.Parameters.AddWithValue("@Type", A.Type);
                     cmd.Parameters.AddWithValue("@Action", A.Action);
                     cmd.Parameters.AddWithValue("@Title", A.Title);
-
-                    MemoryStream ms = new MemoryStream();
-                    if (A.Icon != null) A.Icon.Save(ms);
-                    byte[] arr = new byte[ms.Length];
-                    ms.Position = 0;
-                    ms.Read(arr, 0, (int)ms.Length);
-                    ms.Close();
-                    cmd.Parameters.AddWithValue("@Icon", Convert.ToBase64String(arr));
+                    cmd.Parameters.AddWithValue("@Icon", Consts.Icon2Base64String(A.Icon));
 
                     cmd.ExecuteNonQuery();
                     return true;
@@ -49,7 +42,7 @@ namespace TimeMonitor
             }
         }
 
-        public static List<Actions> GetData(string StartDateTime, string EndDateTime)
+        public static List<Actions> GetActions(string StartDateTime, string EndDateTime)
         {
             DateTime SDT, EDT;
             try

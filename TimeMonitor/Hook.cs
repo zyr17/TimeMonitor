@@ -28,7 +28,7 @@ namespace TimeMonitor
                 Action = "Keyboard",
                 Title = state.Key.ToString()
             };
-            Data.AddData(actions);
+            Data.AddActions(actions);
         }
 
         private static void MouseEvent(ref MouseHook.StateMouse state)
@@ -42,7 +42,7 @@ namespace TimeMonitor
                 Action = "Mouse",
                 Title = state.button + " " + state.posX + " " + state.posY
             };
-            Data.AddData(actions);
+            Data.AddActions(actions);
         }
     }
 }
