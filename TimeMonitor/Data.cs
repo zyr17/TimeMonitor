@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace TimeMonitor
 {
@@ -26,6 +27,29 @@ namespace TimeMonitor
             public Icon I;
             public DateTime Start, End;
             public string Action, Title, ID;
+            public SolidColorBrush Color;
+            public long Ticks
+            {
+                get
+                {
+                    return (End - Start).Ticks;
+                }
+                set
+                {
+                    End = Start.AddTicks(value);
+                }
+            }
+            public ShowData() { }
+            public ShowData(ShowData old)
+            {
+                I = old.I;
+                Start = old.Start;
+                End = old.End;
+                Action = old.Action;
+                Title = old.Title;
+                ID = old.ID;
+                Color = old.Color;
+            }
         }
         public static bool AddActions(Actions A)
         {

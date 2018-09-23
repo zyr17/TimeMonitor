@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:TimeMonitor"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" FontSize="12">
-    <Grid Height="32" Margin="2" Background="WhiteSmoke">
+    <Grid Height="48" Margin="2" Background="WhiteSmoke">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="32"/>
+            <ColumnDefinition Width="48"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Image Name="IconImage"/>
@@ -16,9 +16,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Name="TimeTextBlock" Text="TimeTextBlock" VerticalAlignment="Center"/>
-            <Grid Grid.Row="1">
+            <TextBlock Name="StartTimeTextBlock" Text="StartTimeTextBlock" VerticalAlignment="Center"/>
+            <TextBlock Name="EndTimeTextBlock" Grid.Row="1" Text="EndTimeTextBlock" VerticalAlignment="Center"/>
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" MinWidth="90"/>
                     <ColumnDefinition Width="Auto" MinWidth="90"/>

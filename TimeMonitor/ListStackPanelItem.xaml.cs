@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,8 +26,10 @@ namespace TimeMonitor
         {
             InitializeComponent();
             IconImage.Source = Consts.ChangeBitmapToImageSource(SD.I.ToBitmap());
-            TimeTextBlock.Text = "时间：" + SD.Start.ToString(Consts.DateTimeFormatString) + " 至 " + SD.End.ToString(Consts.DateTimeFormatString);
-            ActionTextBlock.Text = SD.Action;
+            StartTimeTextBlock.Text = "开始时间：" + SD.Start.ToString(Consts.DateTimeFormatString);
+            EndTimeTextBlock.Text = "结束时间：" + SD.End.ToString(Consts.DateTimeFormatString);
+            var m = Regex.Match(SD.Action, @"[^\\/]*$");
+            ActionTextBlock.Text = m.Success ? m.Value : SD.Action;
             TitleTextBlock.Text = SD.Title;
         }
     }
