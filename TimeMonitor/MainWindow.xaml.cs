@@ -159,6 +159,7 @@ namespace TimeMonitor
                         };
                         if (last != null) last.End = SD.Start;
                         ShowDataList.Add(SD);
+                        lastmove = a.DateTime;
                     }
                     else
                     {
@@ -167,7 +168,26 @@ namespace TimeMonitor
                 }
                 else
                 {
-                    //a.Type == 1
+                    if ((a.DateTime - lastmove) > Consts.ActiveTimeSpan)
+                    {
+                        if (ShowDataList.Count == 0)
+                            goto End;
+                        var lastshowdata = new Data.ShowData(ShowDataList.Last());
+                        var fishdata = new Data.ShowData()
+                        {
+                            I = Consts.Base64String2Icon(Consts.fishstr),
+                            Start = lastmove,
+                            End = a.DateTime,
+                            Action = Consts.CatchFishString,
+                            Title = ""
+                        };
+                        ShowDataList.Last().End = lastmove;
+                        ShowDataList.Add(fishdata);
+                        lastshowdata.Start = lastshowdata.End = a.DateTime;
+                        ShowDataList.Add(lastshowdata);
+                    }
+                    End:;
+                    lastmove = a.DateTime;
                 }
             }
             /*
