@@ -101,7 +101,7 @@ namespace TimeMonitor
                 //TB.Text = PP.ProcessName + "|" + PP.MainModule.FileName + "|" + PP.MainWindowTitle;
                 Icon i = System.Drawing.Icon.ExtractAssociatedIcon(PP.MainModule.FileName);
                 Data.Actions A = new Data.Actions();
-                A.DateTimeString = DateTime.Now.ToString(Consts.DateTimeFormatString);
+                A.DateTime = DateTime.Now;
                 A.Type = 0;
                 A.Action = PP.MainModule.FileName;
                 A.Title = PP.MainWindowTitle;

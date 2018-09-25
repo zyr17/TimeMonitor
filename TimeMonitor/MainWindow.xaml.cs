@@ -110,13 +110,7 @@ namespace TimeMonitor
                 StartYMDTextBlock.Text = strs[0];
                 StartHMSTextBlock.Text = strs[1];
             }
-        }
-
-        string GetTime()
-        {
-            DTS = new DateTimeSelector();
-            DTS.ShowDialog();
-            return DTS.TimeResult;
+            UpdateByShowData();
         }
 
         private void EndTimeSelectButton_Click(object sender, RoutedEventArgs e)
@@ -128,6 +122,14 @@ namespace TimeMonitor
                 EndYMDTextBlock.Text = strs[0];
                 EndHMSTextBlock.Text = strs[1];
             }
+            UpdateByShowData();
+        }
+
+        string GetTime()
+        {
+            DTS = new DateTimeSelector();
+            DTS.ShowDialog();
+            return DTS.TimeResult;
         }
 
         double GetShowData()
@@ -135,6 +137,40 @@ namespace TimeMonitor
             ShowDataList.Clear();
             SectorDataList.Clear();
 
+            var Actions = Data.GetActions(StartYMDTextBlock.Text + " " + StartHMSTextBlock.Text, EndYMDTextBlock.Text + " " + EndHMSTextBlock.Text);
+
+            var lastmove = new DateTime(0);
+            foreach (var a in Actions)
+            {
+                Data.ShowData last = null;
+                if (ShowDataList.Count != 0) last = ShowDataList.Last();
+                
+                if (a.Type == 0)
+                {
+                    if (last == null || last.Action != a.Action || last.Title != a.Title)
+                    {
+                        var SD = new Data.ShowData()
+                        {
+                            I = a.Icon,
+                            Start = a.DateTime,
+                            End = a.DateTime,
+                            Action = a.Action,
+                            Title = a.Title,
+                        };
+                        if (last != null) last.End = SD.Start;
+                        ShowDataList.Add(SD);
+                    }
+                    else
+                    {
+                        last.End = a.DateTime;
+                    }
+                }
+                else
+                {
+                    //a.Type == 1
+                }
+            }
+            /*
             var SD = new Data.ShowData
             {
                 I = Consts.Base64String2Icon(Consts.xstr),
@@ -153,6 +189,9 @@ namespace TimeMonitor
                 if (i < 10) SD.Title = "Chrome";
                 if (i < 9) SD.Action = @"F:\123\notepad.exe";
             }
+            */
+
+            if (ShowDataList.Count == 0) return 0;
 
             double totalTime = (ShowDataList.Last().End - ShowDataList[0].Start).Ticks;
 

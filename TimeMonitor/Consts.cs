@@ -14,7 +14,9 @@ namespace TimeMonitor
         public static TimeSpan ActiveTimeSpan = new TimeSpan(0, 5, 0);
         public static TimeSpan HookTimeSpan = new TimeSpan(0, 0, 5);
         public static TimeSpan CheckForegroundTimeSpan = new TimeSpan(0, 0, 0, 1, 0);
+        public static TimeSpan CatchFishTimeSpan = new TimeSpan(0, 0, 0, 10, 0); 
         public const string DateTimeFormatString = "yyyy-MM-dd HH:mm:ss";
+        public const string CatchFishString = "摸鱼中...";
         static SolidColorBrush[] Colors = {
             Brushes.MediumSlateBlue,
             Brushes.LightSkyBlue,

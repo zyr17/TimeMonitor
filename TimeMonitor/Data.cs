@@ -16,7 +16,8 @@ namespace TimeMonitor
     {
         public class Actions
         {
-            public string DateTimeString;
+            public string DateTimeString { get { return DateTime.ToString(Consts.DateTimeFormatString); } }
+            public DateTime DateTime;
             public int Type;
             public string Action;
             public string Title;
@@ -26,7 +27,7 @@ namespace TimeMonitor
         {
             public Icon I;
             public DateTime Start, End;
-            public string Action, Title, ID;
+            public string Action, Title;
             public SolidColorBrush Color;
             public long Ticks
             {
@@ -47,7 +48,7 @@ namespace TimeMonitor
                 End = old.End;
                 Action = old.Action;
                 Title = old.Title;
-                ID = old.ID;
+                //ID = old.ID;
                 Color = old.Color;
             }
         }
@@ -95,12 +96,13 @@ namespace TimeMonitor
                     foreach (DataRow r in DT.Rows)
                     {
                         Actions A = new Actions();
-                        DateTime D = new DateTime((long)r["TimeStamp"]);
-                        A.DateTimeString = D.ToString(Consts.DateTimeFormatString);
+                        A.DateTime = new DateTime((long)r["TimeStamp"]);
                         //D.Year + "-" + D.Month + "-" + D.Day + " " + D.Hour + ":" + D.Minute + ":" + D.Second;
-                        A.Type = (int)r["Type"];
+                        A.Type = (int)(long)r["Type"];
                         A.Action = r["Action"].ToString();
                         A.Title = r["Title"].ToString();
+                        if (r["Icon"] != null && r["Icon"].ToString() != "")
+                            A.Icon = Consts.Base64String2Icon(r["Icon"].ToString());
                         res.Add(A);
                     }
                 }

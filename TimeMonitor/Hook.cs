@@ -23,7 +23,7 @@ namespace TimeMonitor
             lastMove = DateTime.Now.Ticks;
             Data.Actions actions = new Data.Actions
             {
-                DateTimeString = DateTime.Now.ToString(Consts.DateTimeFormatString),
+                DateTime = DateTime.Now,
                 Type = 1,
                 Action = "Keyboard",
                 Title = state.Key.ToString()
@@ -37,7 +37,7 @@ namespace TimeMonitor
             lastMove = DateTime.Now.Ticks;
             Data.Actions actions = new Data.Actions
             {
-                DateTimeString = DateTime.Now.ToString(Consts.DateTimeFormatString),
+                DateTime = DateTime.Now,
                 Type = 1,
                 Action = "Mouse",
                 Title = state.button + " " + state.posX + " " + state.posY
