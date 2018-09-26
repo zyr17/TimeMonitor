@@ -84,8 +84,10 @@ namespace TimeMonitor
             var PP = FindHostedProcess.Find();
             if (PP == null) return;
             TB.Text = PP.ProcessName + "|" + PP.MainModule.FileName + "|" + PP.MainWindowTitle;
-            Bitmap img = System.Drawing.Icon.ExtractAssociatedIcon(PP.MainModule.FileName).ToBitmap();
-            IMG.Source = Consts.ChangeBitmapToImageSource(img);
+            //Bitmap img = Consts.Base64String2Icon(Consts.Icon2Base64String(System.Drawing.Icon.ExtractAssociatedIcon(PP.MainModule.FileName))).ToBitmap();
+            Icon icon = System.Drawing.Icon.ExtractAssociatedIcon(PP.MainModule.FileName);
+            Icon icon2 = Consts.Base64String2Icon(Consts.Icon2Base64String(icon));
+            IMG.Source = Consts.ChangeBitmapToImageSource(icon2.ToBitmap());
         }
     }
 }

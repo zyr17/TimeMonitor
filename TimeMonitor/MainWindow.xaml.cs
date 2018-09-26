@@ -42,12 +42,14 @@ namespace TimeMonitor
 
             Loaded += Initialize_ShowData;
 
+            GenerateNIC();
             Hook.Start();
             CheckForeground.Start();
         }
 
         private void Initialize_ShowData(object sender, EventArgs e)
         {
+            //var str = Consts.Icon2Base64String(new Icon("clock.ico"));
             UpdateByShowData();
         }
 
@@ -61,7 +63,7 @@ namespace TimeMonitor
             NIC.ContextMenuStripItems.Add("退出");
             NIC.ContextMenuStripItems[1].Click += Exit_Click;
             NIC.NotifyIconDoubleClick = Visibility_Click;
-            NIC.NotifyIconIcon = Consts.Base64String2Icon(Consts.clockstr);
+            NIC.NotifyIconIcon = Consts.Base64String2Icon(Consts.IconClockStr);
         }
 
         private void Visibility_Click(object sender, EventArgs e)
@@ -89,20 +91,6 @@ namespace TimeMonitor
 
         private void StartTimeSelectButton_Click(object sender, RoutedEventArgs e)
         {
-            /*
-            double l = SectorGrid.ActualWidth / 2, t = SectorGrid.ActualHeight / 2;
-            double r = (l > t ? t : l) / 1.2;
-            double st = start, ed = start + delta;
-            start += delta;
-            SectorPath TM = new SectorPath(l, t, r, st, ed);
-            SectorGrid.Children.Add(TM.GetPath);
-            l = RectangleGrid.ActualWidth / 20;
-            t = RectangleGrid.ActualHeight / 20;
-            double w = l * 18;
-            double h = t * 18;
-            RectanglePath RP = new RectanglePath(l, t, w, h, st, ed);
-            RectangleGrid.Children.Add(RP.GetPath);
-            */
             string SelectedTime = GetTime();
             if (SelectedTime != null)
             {
@@ -175,7 +163,7 @@ namespace TimeMonitor
                         var lastshowdata = new Data.ShowData(ShowDataList.Last());
                         var fishdata = new Data.ShowData()
                         {
-                            I = Consts.Base64String2Icon(Consts.fishstr),
+                            I = Consts.Base64String2Icon(Consts.IconFishStr),
                             Start = lastmove,
                             End = a.DateTime,
                             Action = Consts.CatchFishString,
