@@ -22,15 +22,26 @@ namespace TimeMonitor
     /// </summary>
     public partial class ListStackPanelItem : UserControl
     {
+        public string FullFileName { get; private set; }
         public ListStackPanelItem(Data.ShowData SD)
         {
             InitializeComponent();
             IconImage.Source = Consts.ChangeBitmapToImageSource(SD.I.ToBitmap());
             StartTimeTextBlock.Text = "开始时间：" + SD.Start.ToString(Consts.DateTimeFormatString);
             EndTimeTextBlock.Text = "结束时间：" + SD.End.ToString(Consts.DateTimeFormatString);
-            var m = Regex.Match(SD.Action, @"[^\\/]*$");
-            ActionTextBlock.Text = m.Success ? m.Value : SD.Action;
+            ActionTextBlock.Text = Consts.GetFileName(SD.Action);
+            FullFileName = SD.Action;
             TitleTextBlock.Text = SD.Title;
+        }
+
+        public void AddTransform()
+        {
+            MainGrid.Background = System.Windows.Media.Brushes.LightGreen;
+        }
+
+        public void RemoveTransform()
+        {
+            MainGrid.Background = System.Windows.Media.Brushes.WhiteSmoke;
         }
     }
 }

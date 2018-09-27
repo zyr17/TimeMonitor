@@ -44,14 +44,24 @@ namespace TimeMonitor
 
         private void MyPath_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            GetPath.RenderTransform = null;
-            GetPath.Margin = new Thickness(0);
+            RemoveTransform();
         }
 
         private void MyPath_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            AddTransform();
+        }
+
+        public void AddTransform()
+        {
             GetPath.RenderTransform = new ScaleTransform(1.1, 1.1);
             GetPath.Margin = new Thickness(-ox / 10, -oy / 10, 0, 0);
+        }
+
+        public void RemoveTransform()
+        {
+            GetPath.RenderTransform = null;
+            GetPath.Margin = new Thickness(0);
         }
     }
 }

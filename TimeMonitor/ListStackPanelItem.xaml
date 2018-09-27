@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TimeMonitor"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" FontSize="12">
-    <Grid Height="48" Margin="2" Background="WhiteSmoke">
+    <Grid Name="MainGrid" Height="48" Margin="2" Background="WhiteSmoke">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="48"/>
             <ColumnDefinition Width="*"/>

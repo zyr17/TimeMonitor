@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -16,6 +17,7 @@ namespace TimeMonitor
         public static TimeSpan ActiveTimeSpan = new TimeSpan(0, 0, 0, 10, 0);
         public static TimeSpan HookTimeSpan = new TimeSpan(0, 0, 5);
         public static TimeSpan CheckForegroundTimeSpan = new TimeSpan(0, 0, 0, 1, 0);
+        public static TimeSpan MinimumCountTimeSpan = new TimeSpan(0, 0, 0, 0, 500);
         public const string DateTimeFormatString = "yyyy-MM-dd HH:mm:ss";
         public const string CatchFishString = "摸鱼中...";
         static SolidColorBrush[] Colors = {
@@ -85,6 +87,12 @@ namespace TimeMonitor
             }
             Debug.Write(bitmap.PixelFormat);
             return System.Drawing.Icon.FromHandle(bitmap.GetHicon());
+        }
+
+        public static string GetFileName(string FullName)
+        {
+            var m = Regex.Match(FullName, @"[^\\/]*$");
+            return m.Success ? m.Value : FullName;
         }
 
         public static string IconClockStr

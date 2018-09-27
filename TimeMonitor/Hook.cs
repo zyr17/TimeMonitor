@@ -17,6 +17,12 @@ namespace TimeMonitor
             KeyboardHook.Start();
         }
 
+        public static void Stop()
+        {
+            MouseHook.Stop();
+            KeyboardHook.Stop();
+        }
+
         private static void KeyboardEvent(ref KeyboardHook.StateKeyboard state)
         {
             if (DateTime.Now.Ticks < lastMove + Consts.HookTimeSpan.Ticks) return;

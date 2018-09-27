@@ -30,8 +30,8 @@ namespace TimeMonitor
 
         List<Data.ShowData> ShowDataList = new List<Data.ShowData>();
         List<Data.ShowData> SectorDataList = new List<Data.ShowData>();
-        List<Path> RectanglePathList = new List<Path>();
-        List<Path> SectorPathList = new List<Path>();
+        List<RectanglePath> RectanglePathList = new List<RectanglePath>();
+        List<SectorPath> SectorPathList = new List<SectorPath>();
         NotifyIconComponent NIC;
         DateTimeSelector DTS;
 
@@ -74,6 +74,7 @@ namespace TimeMonitor
         private void Exit_Click(object sender, EventArgs e)
         {
             NIC.NotifyIconVisibility = false;
+            Hook.Stop();
             Environment.Exit(0);
         }
 
@@ -128,6 +129,7 @@ namespace TimeMonitor
             var Actions = Data.GetActions(StartYMDTextBlock.Text + " " + StartHMSTextBlock.Text, EndYMDTextBlock.Text + " " + EndHMSTextBlock.Text);
 
             var lastmove = new DateTime(0);
+            if (Actions.Count > 0) lastmove = Actions[0].DateTime;
             foreach (var a in Actions)
             {
                 Data.ShowData last = null;
@@ -137,6 +139,19 @@ namespace TimeMonitor
                 {
                     if (last == null || last.Action != a.Action || last.Title != a.Title)
                     {
+                        if (a.DateTime - lastmove > Consts.ActiveTimeSpan)
+                        {
+                            var fishdata = new Data.ShowData()
+                            {
+                                I = Consts.Base64String2Icon(Consts.IconFishStr),
+                                Start = lastmove,
+                                End = a.DateTime,
+                                Action = Consts.CatchFishString,
+                                Title = ""
+                            };
+                            ShowDataList.Add(fishdata);
+                            last = ShowDataList.Last();
+                        }
                         var SD = new Data.ShowData()
                         {
                             I = a.Icon,
@@ -178,26 +193,18 @@ namespace TimeMonitor
                     lastmove = a.DateTime;
                 }
             }
-            /*
-            var SD = new Data.ShowData
+
+            var tmplist = ShowDataList;
+            ShowDataList = new List<Data.ShowData>();
+            foreach (var i in tmplist)
             {
-                I = Consts.Base64String2Icon(Consts.xstr),
-                Start = new DateTime(2018, 7, 7, 12, 0, 0),
-                End = DateTime.Now,
-                Action = @"E:/dididi bababa (x86)/explorer.exe",
-                Title = "TimeMonitor",
-            };
-            for (int i = 10; i > 0; i--)
-            {
-                SD.End = SD.Start.AddHours(i);
-                ShowDataList.Add(SD);
-                var TSD = new Data.ShowData(SD);
-                SD = TSD;
-                SD.Start = SD.End.AddHours(0);
-                if (i < 10) SD.Title = "Chrome";
-                if (i < 9) SD.Action = @"F:\123\notepad.exe";
+                if (ShowDataList.Count > 0 && i.Action == ShowDataList.Last().Action && i.Title == ShowDataList.Last().Title)
+                    ShowDataList.Last().End = i.End;
+                else if (i.Ticks > Consts.MinimumCountTimeSpan.Ticks)
+                    ShowDataList.Add(i);
+                else if (ShowDataList.Count > 0)
+                    ShowDataList.Last().End = i.End;
             }
-            */
 
             if (ShowDataList.Count == 0) return 0;
 
@@ -239,21 +246,29 @@ namespace TimeMonitor
             SectorGrid.Children.Clear();
             
             double sectorst = 0;
-            foreach (var data in SectorDataList)
+            for (int i = 0; i < SectorDataList.Count; i++)
             {
+                var data = SectorDataList[i];
                 double l = SectorGrid.ActualWidth / 2, t = SectorGrid.ActualHeight / 2;
                 double r = (l > t ? t : l) / 1.2;
                 double ed = sectorst + (data.End - data.Start).Ticks / totalTime;
                 SectorPath SP = new SectorPath(l, t, r, sectorst - 0.25, ed - 0.25, data.Color);
                 sectorst = ed;
 
-                SectorPathList.Add(SP.GetPath);
-                SectorGrid.Children.Add(SectorPathList.Last());
+                SectorPathList.Add(SP);
+                SectorPathList.Last().GetPath.MouseEnter += DataMouseEnter;
+                SectorPathList.Last().GetPath.MouseLeave += DataMouseLeave;
+                SectorPathList.Last().GetPath.Tag = -1 - i;
+                SectorGrid.Children.Add(SectorPathList.Last().GetPath);
             }
 
-            foreach (var data in ShowDataList)
+            for (int i = 0; i < ShowDataList.Count; i++)
             {
+                var data = ShowDataList[i];
                 ListStackPanelItem LSPI = new ListStackPanelItem(data);
+                LSPI.MouseEnter += DataMouseEnter;
+                LSPI.MouseLeave += DataMouseLeave;
+                LSPI.Tag = i;
                 ListStackPanel.Children.Add(LSPI);
                 
                 double l = RectangleGrid.ActualWidth / 20;
@@ -264,11 +279,98 @@ namespace TimeMonitor
                 double ed = st + (data.End - data.Start).Ticks / totalTime;
                 RectanglePath RP = new RectanglePath(l, t, w, h, st, ed, data.Color);
 
-                RectanglePathList.Add(RP.GetPath);
-                RectangleGrid.Children.Add(RectanglePathList.Last());
+                RectanglePathList.Add(RP);
+                RectanglePathList.Last().GetPath.MouseEnter += DataMouseEnter;
+                RectanglePathList.Last().GetPath.MouseLeave += DataMouseLeave;
+                RectanglePathList.Last().GetPath.Tag = i;
+                RectangleGrid.Children.Add(RectanglePathList.Last().GetPath);
             }
-
             
+        }
+
+        void DataMouseEnter(object sender, MouseEventArgs e)
+        {
+            string a = "", t = "";
+            bool liststackpanelin = false;
+            int id;
+            if (sender is ListStackPanelItem)
+            {
+                var LSP = sender as ListStackPanelItem;
+                liststackpanelin = true;
+                a = LSP.FullFileName;
+                t = LSP.TitleTextBlock.Text;
+                id = (int)LSP.Tag;
+            }
+            else
+            {
+                id = (int)(sender as FrameworkElement).Tag;
+                if (id < 0)
+                {
+                    a = SectorDataList[-id - 1].Action;
+                    t = SectorDataList[-id - 1].Title;
+                }
+                else
+                {
+                    a = ShowDataList[id].Action;
+                    t = ShowDataList[id].Title;
+                }
+            }
+            Debug.Write(a + "|" + t + "|" + liststackpanelin);
+            if (!liststackpanelin)
+            {
+                if (id >= 0)
+                {
+                    var nowitem = ListStackPanel.Children[id] as ListStackPanelItem;
+                    nowitem.AddTransform();
+                    var dis = nowitem.TranslatePoint(new System.Windows.Point(0, 0), ListStackPanel).Y;
+                    ListScrollViewer.ScrollToVerticalOffset(dis);
+                }
+                else
+                {
+                    var moved = false;
+                    foreach (ListStackPanelItem item in ListStackPanel.Children)
+                    {
+                        if (item.FullFileName == a && item.TitleTextBlock.Text == t)
+                        {
+                            item.AddTransform();
+                            if (!moved)
+                            {
+                                moved = true;
+                                var dis = item.TranslatePoint(new System.Windows.Point(0, 0), ListStackPanel).Y;
+                                ListScrollViewer.ScrollToVerticalOffset(dis);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                var nowitem = ListStackPanel.Children[id] as ListStackPanelItem;
+                nowitem.AddTransform();
+            }
+            if (liststackpanelin)
+            {
+                RectanglePathList[id].AddTransform();
+            }
+            else
+            {
+                for (var i = 0; i < ShowDataList.Count; i++)
+                    if (ShowDataList[i].Action == a && ShowDataList[i].Title == t)
+                        RectanglePathList[i].AddTransform();
+            }
+            for (int i = 0; i < SectorDataList.Count; i++)
+                if (SectorDataList[i].Action == a && SectorDataList[i].Title == t)
+                    SectorPathList[i].AddTransform();
+        }
+
+        void DataMouseLeave(object sender, MouseEventArgs e)
+        {
+            foreach (ListStackPanelItem item in ListStackPanel.Children)
+                item.RemoveTransform();
+            foreach (var i in SectorPathList)
+                i.RemoveTransform();
+            foreach (var i in RectanglePathList)
+                i.RemoveTransform();
         }
 
     }
