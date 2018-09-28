@@ -95,6 +95,11 @@ namespace TimeMonitor
             return m.Success ? m.Value : FullName;
         }
 
+        public static string TimeSpan2String(TimeSpan TS)
+        {
+            return TS.Days + "日" + TS.Hours + "时" + TS.Minutes + "分" + TS.Seconds + "秒" + TS.Milliseconds + "毫秒";
+        }
+
         public static string IconClockStr
         {
             get

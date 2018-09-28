@@ -87,5 +87,45 @@
             <Grid Name="SectorGrid" Grid.Column="2"/>
         </Grid>
         <Grid Name="RectangleGrid" Grid.Row="1"/>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="170"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="该项用时" FontSize="12"/>
+            <TextBlock Text="总用时" FontSize="12" Grid.Row="1"/>
+            <TextBlock Text="按标题拆分" FontSize="12" Grid.Row="2"/>
+            <TextBlock Text="区间总时间" FontSize="12" Grid.Row="3"/>
+            <TextBlock Name="ThisTimeTextBlock" Text="100日10时10分10秒100毫秒" FontSize="12" Grid.Column="1"/>
+            <TextBlock Name="ThisTotalTimeTextBlock" Text="100日10时10分10秒100毫秒" FontSize="12" Grid.Row="1" Grid.Column="1"/>
+            <TextBlock Name="DivideByTitleTextBlock" Text="是" FontSize="12" Grid.Row="2" Grid.Column="1"/>
+            <TextBlock Name="TotalTimeTextBlock" Text="100日10时10分10秒100毫秒" FontSize="12" Grid.Row="3" Grid.Column="1"/>
+            <TextBlock Name="ThisPercentTextBlock" Text="50.505%" FontSize="12" Grid.Column="2"/>
+            <TextBlock Name="ThisTotalPercentTextBlock" Text="50.505%" FontSize="12" Grid.Row="1" Grid.Column="2"/>
+            <TextBlock Text="应用程序" FontSize="12" Grid.Column="3"/>
+            <TextBlock Text="标题" FontSize="12" Grid.Row="1" Grid.Column="3"/>
+            <TextBlock Text="摸鱼时间" FontSize="12" Grid.Row="2" Grid.Column="3"/>
+            <TextBlock Text="总摸鱼时间" FontSize="12" Grid.Row="3" Grid.Column="3"/>
+            <TextBlock Name="ActionNameTextBlock" Text="SQLiteDatabaseBrowserPortable.exe" FontSize="12" Grid.Column="4"/>
+            <TextBlock Name="TitleTextBlock" Text="MainWindow" FontSize="12" Grid.Row="1" Grid.Column="4"/>
+            <TextBlock Name="CatchFishTextBlock" Text="是" FontSize="12" Grid.Row="2" Grid.Column="4"/>
+            <Grid Grid.Row="3" Grid.Column="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Name="CatchFishTimeTextBlock" Text="100日10时10分10秒100毫秒" FontSize="12"/>
+                <TextBlock Name="CatchFishPercentTextBlock" Text="50.505%" FontSize="12" Grid.Column="1"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

@@ -45,6 +45,7 @@ namespace TimeMonitor
             GenerateNIC();
             Hook.Start();
             CheckForeground.Start();
+            SetStatistical(null, new TimeSpan(), new TimeSpan(), new TimeSpan(), false, false);
         }
 
         private void Initialize_ShowData(object sender, EventArgs e)
@@ -361,6 +362,24 @@ namespace TimeMonitor
             for (int i = 0; i < SectorDataList.Count; i++)
                 if (SectorDataList[i].Action == a && SectorDataList[i].Title == t)
                     SectorPathList[i].AddTransform();
+            Data.ShowData SD = null;
+            if (id >= 0) SD = ShowDataList[id];
+            else for (var i = 0; i < ShowDataList.Count; i++)
+                    if (ShowDataList[i].Action == a && ShowDataList[i].Title == t)
+                    {
+                        SD = ShowDataList[i];
+                        break;
+                    }
+            TimeSpan totaltime = ShowDataList.Last().End - ShowDataList[0].Start;
+            TimeSpan thistime = new TimeSpan();
+            foreach (var i in SectorDataList)
+                if (i.Action == a & i.Title == t)
+                    thistime = new TimeSpan(i.Ticks);
+            TimeSpan fishtime = new TimeSpan(0);
+            foreach (var i in ShowDataList)
+                if (i.Action == Consts.CatchFishString)
+                    fishtime += new TimeSpan(i.Ticks);
+            SetStatistical(SD, totaltime, thistime, fishtime, true, SD.Action == Consts.CatchFishString);
         }
 
         void DataMouseLeave(object sender, MouseEventArgs e)
@@ -371,7 +390,37 @@ namespace TimeMonitor
                 i.RemoveTransform();
             foreach (var i in RectanglePathList)
                 i.RemoveTransform();
+            SetStatistical(null, new TimeSpan(), new TimeSpan(), new TimeSpan(), false, false);
         }
 
+        void SetStatistical(Data.ShowData SD, TimeSpan TotalTime, TimeSpan ThisTime, TimeSpan FishTime, bool DivideByTitle, bool CatchFish)
+        {
+            if (SD == null)
+            {
+                DivideByTitleTextBlock.Text = null;
+                CatchFishTextBlock.Text = null;
+                ThisTimeTextBlock.Text = null;
+                ThisTotalTimeTextBlock.Text = null;
+                TotalTimeTextBlock.Text = null;
+                ThisPercentTextBlock.Text = null;
+                ThisTotalPercentTextBlock.Text = null;
+                ActionNameTextBlock.Text = null;
+                TitleTextBlock.Text = null;
+                CatchFishTimeTextBlock.Text = null;
+                CatchFishPercentTextBlock.Text = null;
+                return;
+            }
+            DivideByTitleTextBlock.Text = DivideByTitle ? "是" : "否";
+            CatchFishTextBlock.Text = CatchFish ? "是" : "否";
+            ThisTimeTextBlock.Text = Consts.TimeSpan2String(new TimeSpan(SD.Ticks));
+            ThisTotalTimeTextBlock.Text = Consts.TimeSpan2String(ThisTime);
+            TotalTimeTextBlock.Text = Consts.TimeSpan2String(TotalTime);
+            ThisPercentTextBlock.Text = (100.0 * SD.Ticks / TotalTime.Ticks).ToString("F3") + "%";
+            ThisTotalPercentTextBlock.Text = (100.0 * ThisTime.Ticks / TotalTime.Ticks).ToString("F3") + "%";
+            ActionNameTextBlock.Text = Consts.GetFileName(SD.Action);
+            TitleTextBlock.Text = SD.Title;
+            CatchFishTimeTextBlock.Text = Consts.TimeSpan2String(FishTime);
+            CatchFishPercentTextBlock.Text = (100.0 * FishTime.Ticks / TotalTime.Ticks).ToString("F3") + "%";
+        }
     }
 }
