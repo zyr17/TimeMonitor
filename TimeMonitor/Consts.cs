@@ -20,6 +20,7 @@ namespace TimeMonitor
         public static TimeSpan MinimumCountTimeSpan = new TimeSpan(0, 0, 0, 0, 500);
         public const string DateTimeFormatString = "yyyy-MM-dd HH:mm:ss";
         public const string CatchFishString = "摸鱼中...";
+        public static KeepAlive KA = new KeepAlive();
         static SolidColorBrush[] Colors = {
             Brushes.MediumSlateBlue,
             Brushes.LightSkyBlue,
@@ -42,6 +43,11 @@ namespace TimeMonitor
             {
                 return Colors[nowcolor++ % Colors.Length];
             }
+        }
+
+        public static void ResetNextBrush()
+        {
+            nowcolor = 0;
         }
 
         public static ImageSource ChangeBitmapToImageSource(System.Drawing.Bitmap bitmap)

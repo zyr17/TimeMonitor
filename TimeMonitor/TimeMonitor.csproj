@@ -100,10 +100,16 @@
     <Compile Include="DateTimeSelector.xaml.cs">
       <DependentUpon>DateTimeSelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EnterName.xaml.cs">
+      <DependentUpon>EnterName.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GetForeground.xaml.cs">
       <DependentUpon>GetForeground.xaml</DependentUpon>
     </Compile>
     <Compile Include="Hook.cs" />
+    <Compile Include="KeepAlive.xaml.cs">
+      <DependentUpon>KeepAlive.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ListStackPanelItem.xaml.cs">
       <DependentUpon>ListStackPanelItem.xaml</DependentUpon>
     </Compile>
@@ -113,9 +119,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="EnterName.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GetForeground.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="KeepAlive.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ListStackPanelItem.xaml">
       <SubType>Designer</SubType>

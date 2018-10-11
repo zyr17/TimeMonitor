@@ -38,8 +38,6 @@ namespace TimeMonitor
             PF.Segments.Add(new LineSegment(new Point(ox, oy), false));
             myGeometry.Figures.Add(PF);
             GetPath.Data = myGeometry;
-            GetPath.MouseEnter += MyPath_MouseEnter;
-            GetPath.MouseLeave += MyPath_MouseLeave;
         }
 
         private void MyPath_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)

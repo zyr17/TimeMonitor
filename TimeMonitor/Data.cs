@@ -29,6 +29,7 @@ namespace TimeMonitor
             public DateTime Start, End;
             public string Action, Title;
             public SolidColorBrush Color;
+            public bool IsCatchFish;
             public long Ticks
             {
                 get
@@ -40,6 +41,7 @@ namespace TimeMonitor
                     End = Start.AddTicks(value);
                 }
             }
+            public string ActionTitle { get { return Action + "|" + Title; } }
             public ShowData() { }
             public ShowData(ShowData old)
             {
@@ -50,8 +52,10 @@ namespace TimeMonitor
                 Title = old.Title;
                 //ID = old.ID;
                 Color = old.Color;
+                IsCatchFish = old.IsCatchFish;
             }
         }
+
         public static bool AddActions(Actions A)
         {
             using (SQLiteConnection con = new SQLiteConnection("Data Source=Actions.db;Version=3;"))
@@ -108,6 +112,53 @@ namespace TimeMonitor
                 }
             }
             return res;
+        }
+
+        public static List<string> GetFishs()
+        {
+            List<string> res = new List<string>();
+            using (SQLiteConnection con = new SQLiteConnection("Data Source=Actions.db;Version=3;"))
+            {
+                con.Open();
+                using (SQLiteDataAdapter DA = new SQLiteDataAdapter("SELECT * FROM Relax", con))
+                {
+                    DataTable DT = new DataTable();
+                    DA.Fill(DT);
+                    foreach (DataRow DR in DT.Rows)
+                        res.Add(DR["Name"] as string);
+                }
+            }
+            return res;
+        }
+
+        public static bool AddFish(string name)
+        {
+            List<string> res = new List<string>();
+            using (SQLiteConnection con = new SQLiteConnection("Data Source=Actions.db;Version=3;"))
+            {
+                con.Open();
+                using (SQLiteCommand cmd = new SQLiteCommand("INSERT INTO Relax (Name) VALUES (@Name)", con))
+                {
+                    cmd.Parameters.AddWithValue("@Name", name);
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+            }
+        }
+
+        public static bool RemoveFish(string name)
+        {
+            List<string> res = new List<string>();
+            using (SQLiteConnection con = new SQLiteConnection("Data Source=Actions.db;Version=3;"))
+            {
+                con.Open();
+                using (SQLiteCommand cmd = new SQLiteCommand("DELETE FROM Relax WHERE Name = @name", con))
+                {
+                    cmd.Parameters.AddWithValue("@Name", name);
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+            }
         }
     }
 }

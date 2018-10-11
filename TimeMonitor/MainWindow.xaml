@@ -60,7 +60,7 @@
                     </Grid>
                     <Button Click="EndTimeSelectButton_Click" Content="选择" Height="30" Width="45" Grid.Column="2"/>
                 </Grid>
-                <Button Content="设为摸鱼任务" Height="30" Width="165" Grid.Row="2"/>
+                <Button Name="CatchFishButton" Click="CatchFishButton_Click" Content="设为摸鱼任务" Height="30" Width="165" Grid.Row="2"/>
                 <Button Content="按标题拆分任务" Height="30" Width="165" Grid.Row="3"/>
                 <Grid Grid.Row="4">
                     <Grid.RowDefinitions>

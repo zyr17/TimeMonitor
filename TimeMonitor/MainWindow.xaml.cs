@@ -32,6 +32,7 @@ namespace TimeMonitor
         List<Data.ShowData> SectorDataList = new List<Data.ShowData>();
         List<RectanglePath> RectanglePathList = new List<RectanglePath>();
         List<SectorPath> SectorPathList = new List<SectorPath>();
+        List<string> CatchFishEvents = new List<string>();
         NotifyIconComponent NIC;
         DateTimeSelector DTS;
 
@@ -45,7 +46,8 @@ namespace TimeMonitor
             GenerateNIC();
             Hook.Start();
             CheckForeground.Start();
-            SetStatistical(null, new TimeSpan(), new TimeSpan(), new TimeSpan(), false, false);
+            SetStatistical(null, new TimeSpan(), new TimeSpan(), new TimeSpan(), false);
+            CatchFishEvents = Data.GetFishs();
         }
 
         private void Initialize_ShowData(object sender, EventArgs e)
@@ -61,8 +63,10 @@ namespace TimeMonitor
             NIC.ContextMenuStripItems.Add("显示/隐藏主界面");
             NIC.ContextMenuStripItems[0].Click += Visibility_Click;
             NIC.ContextMenuStripItems[0].Font = new Font(NIC.ContextMenuStripItems[0].Font, NIC.ContextMenuStripItems[0].Font.Style | System.Drawing.FontStyle.Bold);
+            NIC.ContextMenuStripItems.Add("设置挂机标题");
+            NIC.ContextMenuStripItems[1].Click += ShowEnterName_Click;
             NIC.ContextMenuStripItems.Add("退出");
-            NIC.ContextMenuStripItems[1].Click += Exit_Click;
+            NIC.ContextMenuStripItems[2].Click += Exit_Click;
             NIC.NotifyIconDoubleClick = Visibility_Click;
             NIC.NotifyIconIcon = Consts.Base64String2Icon(Consts.IconClockStr);
         }
@@ -77,6 +81,12 @@ namespace TimeMonitor
             NIC.NotifyIconVisibility = false;
             Hook.Stop();
             Environment.Exit(0);
+        }
+
+        private void ShowEnterName_Click(object sender, EventArgs e)
+        {
+            EnterName EN = new EnterName();
+            EN.Show();
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -126,6 +136,7 @@ namespace TimeMonitor
         {
             ShowDataList.Clear();
             SectorDataList.Clear();
+            Consts.ResetNextBrush();
 
             var Actions = Data.GetActions(StartYMDTextBlock.Text + " " + StartHMSTextBlock.Text, EndYMDTextBlock.Text + " " + EndHMSTextBlock.Text);
 
@@ -148,6 +159,7 @@ namespace TimeMonitor
                                 Start = lastmove,
                                 End = a.DateTime,
                                 Action = Consts.CatchFishString,
+                                IsCatchFish = true,
                                 Title = ""
                             };
                             ShowDataList.Add(fishdata);
@@ -161,6 +173,7 @@ namespace TimeMonitor
                             Action = a.Action,
                             Title = a.Title,
                         };
+                        SD.IsCatchFish = CatchFishEvents.Any(str => { return str == SD.ActionTitle; });
                         if (last != null) last.End = SD.Start;
                         ShowDataList.Add(SD);
                         lastmove = a.DateTime;
@@ -183,6 +196,7 @@ namespace TimeMonitor
                             Start = lastmove,
                             End = a.DateTime,
                             Action = Consts.CatchFishString,
+                            IsCatchFish = true,
                             Title = ""
                         };
                         ShowDataList.Last().End = lastmove;
@@ -259,6 +273,7 @@ namespace TimeMonitor
                 SectorPathList.Add(SP);
                 SectorPathList.Last().GetPath.MouseEnter += DataMouseEnter;
                 SectorPathList.Last().GetPath.MouseLeave += DataMouseLeave;
+                SectorPathList.Last().GetPath.MouseDown += DataMouseClick;
                 SectorPathList.Last().GetPath.Tag = -1 - i;
                 SectorGrid.Children.Add(SectorPathList.Last().GetPath);
             }
@@ -269,6 +284,7 @@ namespace TimeMonitor
                 ListStackPanelItem LSPI = new ListStackPanelItem(data);
                 LSPI.MouseEnter += DataMouseEnter;
                 LSPI.MouseLeave += DataMouseLeave;
+                LSPI.MouseDown += DataMouseClick;
                 LSPI.Tag = i;
                 ListStackPanel.Children.Add(LSPI);
                 
@@ -283,14 +299,20 @@ namespace TimeMonitor
                 RectanglePathList.Add(RP);
                 RectanglePathList.Last().GetPath.MouseEnter += DataMouseEnter;
                 RectanglePathList.Last().GetPath.MouseLeave += DataMouseLeave;
+                RectanglePathList.Last().GetPath.MouseDown += DataMouseClick;
                 RectanglePathList.Last().GetPath.Tag = i;
                 RectangleGrid.Children.Add(RectanglePathList.Last().GetPath);
             }
             
         }
 
+        bool ClickInData = false;
+        int LastDataId = -1;
+
         void DataMouseEnter(object sender, MouseEventArgs e)
         {
+            ClickInData = false;
+            DataLeave();
             string a = "", t = "";
             bool liststackpanelin = false;
             int id;
@@ -316,7 +338,18 @@ namespace TimeMonitor
                     t = ShowDataList[id].Title;
                 }
             }
-            Debug.Write(a + "|" + t + "|" + liststackpanelin);
+            //Debug.Write(a + "|" + t + "|" + liststackpanelin);
+            LastDataId = id;
+            if (id < 0)
+            {
+                for (int i = 0; i < ShowDataList.Count; i++)
+                    if (ShowDataList[i].Action == a && ShowDataList[i].Title == t)
+                    {
+                        LastDataId = i;
+                        break;
+                    }
+            }
+            CatchFishButton.Content = ShowDataList[LastDataId].IsCatchFish ? "设为工作任务" : "设为摸鱼任务";
             if (!liststackpanelin)
             {
                 if (id >= 0)
@@ -377,23 +410,34 @@ namespace TimeMonitor
                     thistime = new TimeSpan(i.Ticks);
             TimeSpan fishtime = new TimeSpan(0);
             foreach (var i in ShowDataList)
-                if (i.Action == Consts.CatchFishString)
+                if (i.IsCatchFish)
                     fishtime += new TimeSpan(i.Ticks);
-            SetStatistical(SD, totaltime, thistime, fishtime, true, SD.Action == Consts.CatchFishString);
+            SetStatistical(SD, totaltime, thistime, fishtime, true);
         }
 
         void DataMouseLeave(object sender, MouseEventArgs e)
         {
+            DataLeave();
+        }
+
+        void DataLeave()
+        {
+            if (ClickInData) return;
             foreach (ListStackPanelItem item in ListStackPanel.Children)
                 item.RemoveTransform();
             foreach (var i in SectorPathList)
                 i.RemoveTransform();
             foreach (var i in RectanglePathList)
                 i.RemoveTransform();
-            SetStatistical(null, new TimeSpan(), new TimeSpan(), new TimeSpan(), false, false);
+            SetStatistical(null, new TimeSpan(), new TimeSpan(), new TimeSpan(), false);
         }
 
-        void SetStatistical(Data.ShowData SD, TimeSpan TotalTime, TimeSpan ThisTime, TimeSpan FishTime, bool DivideByTitle, bool CatchFish)
+        void DataMouseClick(object sender, MouseEventArgs e)
+        {
+            ClickInData = true;
+        }
+
+        void SetStatistical(Data.ShowData SD, TimeSpan TotalTime, TimeSpan ThisTime, TimeSpan FishTime, bool DivideByTitle)
         {
             if (SD == null)
             {
@@ -411,7 +455,7 @@ namespace TimeMonitor
                 return;
             }
             DivideByTitleTextBlock.Text = DivideByTitle ? "是" : "否";
-            CatchFishTextBlock.Text = CatchFish ? "是" : "否";
+            CatchFishTextBlock.Text = SD.IsCatchFish ? "是" : "否";
             ThisTimeTextBlock.Text = Consts.TimeSpan2String(new TimeSpan(SD.Ticks));
             ThisTotalTimeTextBlock.Text = Consts.TimeSpan2String(ThisTime);
             TotalTimeTextBlock.Text = Consts.TimeSpan2String(TotalTime);
@@ -421,6 +465,32 @@ namespace TimeMonitor
             TitleTextBlock.Text = SD.Title;
             CatchFishTimeTextBlock.Text = Consts.TimeSpan2String(FishTime);
             CatchFishPercentTextBlock.Text = (100.0 * FishTime.Ticks / TotalTime.Ticks).ToString("F3") + "%";
+        }
+
+        private void CatchFishButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!ClickInData)
+                return;
+            if (ShowDataList[LastDataId].IsCatchFish)
+            {
+                if (ShowDataList[LastDataId].Action != Consts.CatchFishString)
+                {
+                    Data.RemoveFish(ShowDataList[LastDataId].ActionTitle);
+                    CatchFishEvents.Remove(ShowDataList[LastDataId].ActionTitle);
+                }
+                else
+                {
+                    MessageBox.Show("摸鱼时间永远是摸鱼时间！");
+                }
+            }
+            else
+            {
+                Data.AddFish(ShowDataList[LastDataId].ActionTitle);
+                CatchFishEvents.Add(ShowDataList[LastDataId].ActionTitle);
+            }
+            ClickInData = false;
+            UpdateByShowData();
+            DataLeave();
         }
     }
 }
