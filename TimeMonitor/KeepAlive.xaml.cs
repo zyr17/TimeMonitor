@@ -28,7 +28,7 @@ namespace TimeMonitor
 
             AliveTimer.Interval = Consts.ActiveTimeSpan - new TimeSpan(0, 0, 1);
             AliveTimer.Tick += AliveTimer_Tick;
-            Deactivated += KeepAlive_Deactivated; ;
+            Deactivated += KeepAlive_Deactivated;
             Closing += MainWindow_Closing;
         }
 

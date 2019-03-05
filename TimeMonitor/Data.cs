@@ -99,6 +99,11 @@ namespace TimeMonitor
                     ada.Fill(DT);
                     foreach (DataRow r in DT.Rows)
                     {
+                        if (res.Count > 999)
+                        {
+                            MessageBox.Show("条目过多，仅显示1000条。");
+                            break;
+                        }
                         Actions A = new Actions();
                         A.DateTime = new DateTime((long)r["TimeStamp"]);
                         //D.Year + "-" + D.Month + "-" + D.Day + " " + D.Hour + ":" + D.Minute + ":" + D.Second;

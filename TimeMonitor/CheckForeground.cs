@@ -94,28 +94,32 @@ namespace TimeMonitor
 
         public static void ShowForegroundWindow(object sender, EventArgs e)
         {
-            try
+            var t1 = new Task(() =>
             {
-                var PP = FindHostedProcess.Find();
-                if (PP == null) return;
-                //TB.Text = PP.ProcessName + "|" + PP.MainModule.FileName + "|" + PP.MainWindowTitle;
-                Icon i = System.Drawing.Icon.ExtractAssociatedIcon(PP.MainModule.FileName);
-                Data.Actions A = new Data.Actions();
-                A.DateTime = DateTime.Now;
-                A.Type = 0;
-                A.Action = PP.MainModule.FileName;
-                A.Title = PP.MainWindowTitle;
-                A.Icon = i;
-                if (LastActions == null || LastActions.Action != A.Action || LastActions.Title != A.Title)
+                try
                 {
-                    Data.AddActions(A);
-                    LastActions = A;
+                    var PP = FindHostedProcess.Find();
+                    if (PP == null) return;
+                    //TB.Text = PP.ProcessName + "|" + PP.MainModule.FileName + "|" + PP.MainWindowTitle;
+                    Icon i = System.Drawing.Icon.ExtractAssociatedIcon(PP.MainModule.FileName);
+                    Data.Actions A = new Data.Actions();
+                    A.DateTime = DateTime.Now;
+                    A.Type = 0;
+                    A.Action = PP.MainModule.FileName;
+                    A.Title = PP.MainWindowTitle;
+                    A.Icon = i;
+                    if (LastActions == null || LastActions.Action != A.Action || LastActions.Title != A.Title)
+                    {
+                        Data.AddActions(A);
+                        LastActions = A;
+                    }
                 }
-            }
-            catch
-            {
-                
-            }
+                catch
+                {
+
+                }
+            });
+            t1.Start();
         }
     }
 }
